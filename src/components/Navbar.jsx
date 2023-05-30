@@ -1,5 +1,5 @@
 import { Badge } from '@material-ui/core';
-import { Search, ShoppingCartOutlined } from '@material-ui/icons';
+import { Search, ShoppingCartOutlined, FavoriteBorderOutlined} from '@material-ui/icons';
 import React from 'react';
 import styled from 'styled-components';
 import { mobile } from '../responsive';
@@ -16,12 +16,14 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justifycontent: space-between;
+  
   ${mobile({ padding: '10px 0px' })}
 `;
 
 const Left = styled.div`
   flex: 1;
   display: flex;
+  
   align-items: center;
 `;
 
@@ -29,6 +31,7 @@ const Language = styled.span`
   font-size: 14px;
   cursor: pointer;
   display: flex;
+  
   ${mobile({ display: 'none' })}
 `;
 
@@ -38,22 +41,26 @@ const SearchContainer = styled.div`
   align-items: center;
   margin-left: 25px;
   padding: 5px;
+  
 `;
 
 const Input = styled.input`
   display: flex;
   border: none;
+  
   ${mobile({ width: '50px' })}
 `;
 
 const Center = styled.div`
   flex: 1;
   text-align: center;
+  
 `;
 
 const Logo = styled.h1`
   font-weight: bold;
   ${mobile({ fontSize: '24px' })};
+  
 `;
 const Right = styled.div`
   flex: 1;
@@ -61,6 +68,7 @@ const Right = styled.div`
   align-items: center;
   justify-content: flex;
   ${mobile({ flex: 2, justifyContent: 'center' })}
+  
 `;
 
 const MenuItem = styled.div`
@@ -85,12 +93,19 @@ const Navbar = () => {
           </SearchContainer>
         </Left>
         <Center>
-          <Logo>JELABTY</Logo>
+          <Link to ="/"> <Logo>JELABTY</Logo></Link>
         </Center>
         <Right>
           <Link to="/Register"><MenuItem>REGISTER</MenuItem></Link>
           <Link to="/Login"><MenuItem>SIGN IN</MenuItem></Link>
-    <Link to="/cart"> 
+    <Link to="/favorite"> 
+         <MenuItem>
+         <Badge badgeContent={quantity} color="primary">
+              <FavoriteBorderOutlined />
+            </Badge> 
+          </MenuItem> 
+          </Link>
+  <Link to="/cart"> 
          <MenuItem>
          <Badge badgeContent={quantity} color="primary">
               <ShoppingCartOutlined />

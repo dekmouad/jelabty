@@ -1,5 +1,5 @@
 import { Add, Remove } from "@material-ui/icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
@@ -9,9 +9,11 @@ import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
 import { useHistory } from "react-router";
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { removeFromCart } from "../redux/cartRedux";
 
 const KEY = process.env.REACT_APP_STRIPE; 
-
+ 
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -163,6 +165,8 @@ const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const [stripeToken, setStripeToken] = useState(null);
   const history = useHistory();
+  const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
 
   const onToken = (token) => {
     setStripeToken(token);
@@ -182,14 +186,26 @@ const Cart = () => {
     };
     stripeToken && makeRequest();
   }, [stripeToken, cart.total, history]);
+
+  const handleQnt = (type) => {
+    if (type === "dec") {
+      quantity > 1 && setQuantity(quantity - 1);
+    } else {
+      setQuantity(quantity + 1);
+    }
+  };
+  const handleremoveFromCart = (CartItem) => {
+    dispatch(removeFromCart(CartItem));
+  }
+
   return (
     <Container>
       <Navbar />
       <Announcement />
       <Wrapper>
-        <Title>YOUR BAG</Title>
+         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+        <Link to = "/"> <TopButton>CONTINUE SHOPPING</TopButton> </Link>
           <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
             <TopText>Your Wishlist (0)</TopText>
@@ -217,13 +233,16 @@ const Cart = () => {
                 </ProductDetail>
                 <PriceDetail>
                   <ProductAmountContainer>
-                    <Add />
+                   <Add onClick={() => handleQnt("inc")}/>
                     <ProductAmount>{product.quantity}</ProductAmount>
-                    <Remove />
+                    <Remove onClick={() => handleQnt("dec")}/>
                   </ProductAmountContainer>
                   <ProductPrice>
                     $ {product.price * product.quantity}
                   </ProductPrice>
+                  
+                  <button onClick={() => handleremoveFromCart(CartItem)}> delete </button>
+                  
                 </PriceDetail>
               </Product>
             ))}

@@ -14,7 +14,13 @@ const cartSlice = createSlice({
       state.total += action.payload.price * action.payload.quantity;
     },
   },
+  removeFromCart(state, action){
+  const nextCartItems =  state.products.Filer(
+      product => product.id !== action.payload.id
+    )
+    state.product = nextCartItems
+  }
 });
 
-export const { addProduct } = cartSlice.actions;
+export const { addProduct, removeFromCart } = cartSlice.actions;
 export default cartSlice.reducer;
